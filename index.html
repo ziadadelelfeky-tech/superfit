@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#141A1F">
+<title>سوبر فت</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F3EF;--surface:#FFFFFF;--ink:#1B2228;--muted:#5C6870;--line:#D9DDD8;
+  --plate:#C99700;--plate-soft:#FFF3C4;--iron:#2B3640;--ok:#2E7D4F;--warn:#B3401E;--warn-soft:#FBE3DA;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141A1F;--surface:#1D252C;--ink:#E9EDEF;--muted:#9AA6AD;--line:#2E3942;
+  --plate:#F2C230;--plate-soft:#3A3315;--iron:#E9EDEF;--ok:#5CC08A;--warn:#F08A64;--warn-soft:#3B2219;}}
+:root[data-theme="dark"]{--bg:#141A1F;--surface:#1D252C;--ink:#E9EDEF;--muted:#9AA6AD;--line:#2E3942;
+  --plate:#F2C230;--plate-soft:#3A3315;--iron:#E9EDEF;--ok:#5CC08A;--warn:#F08A64;--warn-soft:#3B2219;}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Alexandria","Segoe UI",Tahoma,Arial,sans-serif;font-size:16px;line-height:1.6}
+.wrap{max-width:680px;margin:0 auto;padding:16px 16px 110px}
+h1{font-size:30px;font-weight:800;line-height:1.15;margin:6px 0}
+h2{font-size:22px;margin:22px 0 8px;line-height:1.3}
+h3{font-size:17px;margin:14px 0 6px}
+p{margin:6px 0}
+.muted{color:var(--muted);font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}
+.flag{background:var(--warn-soft);border:1px solid var(--warn);border-radius:14px;padding:12px 14px;margin:10px 0;font-size:14px}
+.hint{background:var(--plate-soft);border-radius:14px;padding:12px 14px;margin:10px 0;font-size:14px}
+button,input,select{font:inherit;color:inherit}
+.btn{display:inline-block;border:0;border-radius:12px;padding:12px 18px;font-weight:700;cursor:pointer;background:var(--iron);color:var(--bg)}
+.btn.alt{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.btn.gold{background:var(--plate);color:#1B2228}
+.btn.full{width:100%}
+.btn:disabled{opacity:.4}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--plate);outline-offset:2px}
+label.f{display:block;margin:12px 0 4px;font-weight:600;font-size:14px}
+input[type=text],input[type=number],input[type=time],input[type=date],select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface)}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.choices{display:grid;gap:8px;margin-top:6px}
+.choice{display:block;text-align:right;width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer}
+.choice b{display:block}.choice span{font-size:13px;color:var(--muted)}
+.choice[aria-pressed="true"]{border-color:var(--plate);background:var(--plate-soft)}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.chk input{width:22px;height:22px;margin-top:2px;accent-color:var(--plate);flex:0 0 auto}
+.progress{height:6px;background:var(--line);border-radius:9px;overflow:hidden;margin:6px 0 14px}
+.progress i{display:block;height:100%;background:var(--plate)}
+nav.bar{position:fixed;bottom:0;left:0;right:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);
+  display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
+nav.bar button{flex:1;border:0;background:none;padding:8px 2px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-radius:10px}
+nav.bar button .ic{display:block;font-size:20px;line-height:1.2}
+nav.bar button[aria-current="true"]{color:var(--ink);background:var(--plate-soft)}
+.hero{padding:6px 0 4px}
+.hero .day{font-size:15px;color:var(--muted);font-weight:600}
+.hero .what{font-size:34px;font-weight:800;line-height:1.1;margin:2px 0 6px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.stat .n{font-size:22px;font-weight:800;direction:ltr}.stat .l{font-size:12px;color:var(--muted)}
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:8px 0}
+.fig{display:block;width:100%;max-width:220px;height:auto;margin:0 auto 8px;color:var(--ink);background:var(--bg);border-radius:10px}
+.ex .t{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.ex .ar{font-weight:700}.ex .en{font-size:12px;color:var(--muted);direction:ltr;text-align:right}
+.ex .dose{font-weight:800;white-space:nowrap;direction:ltr}
+.ex .meta{font-size:13px;color:var(--muted);margin-top:2px}
+.ex .links{display:flex;gap:8px;margin-top:8px}
+.ex .links a{flex:1;text-align:center;text-decoration:none;font-size:13px;font-weight:700;padding:7px;border-radius:8px;border:1px solid var(--line);color:var(--ink);background:var(--bg)}
+.sets{margin-top:10px;display:grid;gap:6px}
+.set{display:grid;grid-template-columns:28px 1fr 1fr 44px;gap:6px;align-items:center}
+.set .i{font-size:13px;color:var(--muted);text-align:center}
+.set input{padding:8px;text-align:center;direction:ltr}
+.set button{height:40px;border-radius:10px;border:1px solid var(--line);background:var(--bg);cursor:pointer;font-weight:800}
+.set button[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:#fff}
+.last{font-size:12px;color:var(--muted);margin-top:4px}
+.lvlbtns{display:flex;gap:8px;margin-top:8px}.lvlbtns button{flex:1;font-size:13px;padding:8px}
+.block{border-right:4px solid var(--line);padding:2px 12px 2px 0;margin:16px 0 6px}
+.block.main{border-right-color:var(--plate)}
+.block h3{margin:0}.block p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:62px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.tl .tm{font-weight:800;direction:ltr;text-align:right}
+.tl li.gym{background:var(--plate-soft);border-radius:10px;padding:10px 8px}
+.macro{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.macro .stat .n{font-size:18px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}th{font-size:13px;color:var(--muted);font-weight:600}
+.cups{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.cups button{width:38px;height:44px;border-radius:8px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:18px}
+.cups button[aria-pressed="true"]{background:#3A8DDE;border-color:#3A8DDE}
+.ladder{list-style:none;padding:0;margin:0}
+.ladder li{display:grid;grid-template-columns:40px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.ladder .lv{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:800;border:2px solid var(--line)}
+.ladder li.here .lv{background:var(--plate);border-color:var(--plate);color:#1B2228}
+.ladder li.done .lv{border-color:var(--ok);color:var(--ok)}
+.chart{width:100%;height:auto;display:block}
+.timer{position:fixed;left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:30;max-width:656px;margin:0 auto;
+  background:var(--iron);color:var(--bg);border-radius:14px;padding:12px 14px;display:none;align-items:center;justify-content:space-between;gap:10px}
+.timer.on{display:flex}
+.timer .n{font-size:28px;font-weight:800;direction:ltr}
+.timer button{background:var(--plate);color:#1B2228;border:0;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}
+.weekgrid{display:grid;gap:6px}
+.weekgrid .d{display:flex;justify-content:space-between;padding:10px 12px;border-radius:10px;background:var(--surface);border:1px solid var(--line);cursor:pointer;text-align:right;width:100%}
+.weekgrid .d[aria-current="true"]{border-color:var(--plate);background:var(--plate-soft)}
+.weekgrid .d .k{font-weight:700}
+.small{font-size:12px}
+ul.plain{padding-right:20px;margin:6px 0}ul.plain li{margin:3px 0}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div class="timer" id="timer" role="status" aria-live="polite">
+  <div><div class="small">راحة</div><div class="n" id="tn">0:00</div></div>
+  <div style="display:flex;gap:6px"><button id="tplus">+15ث</button><button id="tskip">خلصت</button></div>
+</div>
+<nav class="bar" id="bar" hidden>
+  <button data-v="today"><span class="ic">🏋️</span>النهارده</button>
+  <button data-v="week"><span class="ic">📅</span>الأسبوع</button>
+  <button data-v="food"><span class="ic">🍽️</span>الأكل</button>
+  <button data-v="life"><span class="ic">😴</span>نوم ومية</button>
+  <button data-v="me"><span class="ic">📈</span>تقدّمي</button>
+</nav>
+
+<script>
+/* ================= DATA ================= */
+const LEVELS=[
+ {n:"من الصفر",d:"قاعد بقالك كتير، أو أول مرة، أو راجع بعد انقطاع طويل",up:"4 أسابيع منتظمة من غير غياب كتير"},
+ {n:"مبتدئ",d:"أقل من 6 شهور تمرين منتظم",up:"6 شهور منتظمة، والتكنيك ثابت في كل الحركات"},
+ {n:"متوسط",d:"من 6 شهور لسنتين",up:"سنتين منتظمين، وبتزوّد أوزان بالأسابيع مش بالحصص"},
+ {n:"متقدم",d:"أكتر من سنتين وتطور بطيء",up:"سنين من التمرين المنضبط والمتابعة مع كوتش"},
+ {n:"نخبة طبيعي",d:"بتجهز لبطولة كمال أجسام طبيعية أو مسابقة قوة",up:"ده آخر مستوى في التطبيق"}
+];
+const GOALS={
+ fat:{n:"نزول دهون",d:"تنزل وزن وتحافظ على العضل"},
+ muscle:{n:"بناء عضل",d:"ضخامة نضيفة من غير دهون كتير"},
+ strength:{n:"قوة",d:"أرقام أعلى في السكوات والبنش والديدليفت"},
+ calis:{n:"كاليستنكس ومهارات",d:"وزن جسمك: عقلة، ديبس، مسل أب، هاند ستاند"},
+ health:{n:"صحة ولياقة",d:"تحاليل أحسن ونَفَس أطول وجسم أنشط"}
+};
+const EX={
+ bench:["بنش بريس بالبار","Barbell bench press","c"],
+ chest_press:["تشيست بريس جهاز","Chest press machine","c"],
+ incline_db:["إنكلاين دمبل بريس","Incline dumbbell press","c"],
+ pec_deck:["بيك دك","Pec deck fly","i"],
+ cable_fly:["كيبل كروس","Cable crossover fly","i"],
+ dips_m:["ديبس جهاز","Machine triceps dip","c"],
+ pulldown:["لات بول داون","Lat pulldown","c"],
+ pullup:["عقلة (أو بمساعدة الجهاز)","Assisted pull up","c"],
+ cable_row:["سيتد كيبل رو","Seated cable row","c"],
+ db_row:["دمبل رو بإيد واحدة","One arm dumbbell row","c"],
+ bb_row:["بنت أوفر رو بالبار","Barbell bent over row","c"],
+ straight_pd:["ستريت آرم بول داون","Straight arm pulldown","i"],
+ face_pull:["فيس بول","Cable face pull","i"],
+ db_ohp:["شولدر بريس دمبلز قاعد","Seated dumbbell shoulder press","c"],
+ arnold:["أرنولد بريس","Arnold press","c"],
+ lat_raise:["لاترال ريز","Dumbbell lateral raise","i"],
+ rear_delt:["ريير ديلت جهاز","Reverse pec deck rear delt","i"],
+ shrug:["شراجز دمبل","Dumbbell shrug","i"],
+ goblet:["جوبلت سكوات","Goblet squat","c"],
+ smith_squat:["سميث سكوات","Smith machine squat","c"],
+ bb_squat:["باك سكوات بالبار","Barbell back squat","c"],
+ leg_press:["ليج بريس","Leg press","c"],
+ hack:["هاك سكوات","Hack squat machine","c"],
+ rdl:["رومانيان ديدليفت","Romanian deadlift","c"],
+ deadlift:["ديدليفت","Conventional deadlift","c"],
+ hip_thrust:["هيب ثرست","Barbell hip thrust","c"],
+ lunges:["لانجز ماشي","Walking dumbbell lunges","c"],
+ leg_ext:["ليج إكستنشن","Leg extension","i"],
+ leg_curl:["ليج كيرل","Lying leg curl","i"],
+ calf:["سمانة واقف","Standing calf raise","i"],
+ bb_curl:["بايسبس كيرل بالبار","Barbell biceps curl","i"],
+ hammer:["هامر كيرل","Dumbbell hammer curl","i"],
+ cable_curl:["كيبل كيرل","Cable biceps curl","i"],
+ preacher:["بريتشر كيرل","Preacher curl machine","i"],
+ pushdown:["ترايسبس بوش داون بالحبل","Rope triceps pushdown","i"],
+ oh_ext:["أوفرهيد ترايسبس","Overhead cable triceps extension","i"],
+ skull:["سكل كراشر بالبار Z","EZ bar skull crusher","i"],
+ plank:["بلانك","Plank","h"],
+ dead_bug:["ديد بج","Dead bug exercise","h"],
+ hang_knee:["رفع الركبة متعلق","Hanging knee raise","h"]
+};
+Object.assign(EX,{
+ db_bench:["دمبل بنش بريس (على دكة أو الأرض)","Dumbbell bench press","c"],
+ db_floor:["دمبل فلور بريس","Dumbbell floor press","c"],
+ db_fly:["دمبل فلاي","Dumbbell fly","i"],
+ db_pullover:["دمبل بول أوفر","Dumbbell pullover","i"],
+ db_row2:["بنت أوفر رو بالدمبلز","Dumbbell bent over row","c"],
+ db_rear:["ريفيرس فلاي بالدمبل","Bent over dumbbell reverse fly","i"],
+ db_squat:["سكوات بالدمبلز","Dumbbell squat","c"],
+ bulgarian:["بلغاري سبليت سكوات بالدمبل","Dumbbell bulgarian split squat","c"],
+ step_up:["ستيب أب على كرسي","Dumbbell step up","c"],
+ db_hip:["هيب ثرست بالدمبل","Dumbbell hip thrust","c"],
+ sl_rdl:["رومانيان برجل واحدة بالدمبل","Single leg dumbbell romanian deadlift","c"],
+ db_rdl:["رومانيان ديدليفت بالدمبلز","Dumbbell romanian deadlift","c"],
+ db_calf:["سمانة بالدمبل","Dumbbell calf raise","i"],
+ db_curl:["بايسبس كيرل بالدمبلز","Dumbbell biceps curl","i"],
+ incline_curl:["إنكلاين كيرل","Incline dumbbell curl","i"],
+ conc_curl:["كونسنتريشن كيرل","Concentration curl","i"],
+ db_kick:["ترايسبس كيك باك بالدمبل","Dumbbell triceps kickback","i"],
+ db_oh:["أوفرهيد ترايسبس بالدمبل","Overhead dumbbell triceps extension","i"],
+ db_skull:["سكل كراشر بالدمبل","Dumbbell skull crusher","i"],
+ bench_dip:["ديبس على الكرسي","Bench dip","c"]
+});
+const HOME={bench:["db_bench","db_floor"],chest_press:["db_floor","db_bench"],incline_db:["incline_db","db_bench"],pec_deck:["db_fly"],cable_fly:["db_fly"],
+ dips_m:["bench_dip"],pulldown:["db_pullover","db_row"],pullup:["db_row","db_row2"],cable_row:["db_row2","db_row"],db_row:["db_row","db_row2"],bb_row:["db_row2","db_row"],
+ straight_pd:["db_pullover"],face_pull:["db_rear"],rear_delt:["db_rear"],goblet:["goblet","db_squat"],smith_squat:["db_squat","goblet"],bb_squat:["db_squat","goblet"],
+ leg_press:["db_squat","goblet","bulgarian"],hack:["bulgarian","step_up"],rdl:["db_rdl","sl_rdl"],deadlift:["db_rdl"],hip_thrust:["db_hip"],leg_ext:["step_up","bulgarian"],
+ leg_curl:["sl_rdl","db_rdl"],calf:["db_calf"],bb_curl:["db_curl"],cable_curl:["conc_curl","incline_curl"],preacher:["incline_curl","conc_curl"],
+ pushdown:["db_kick"],oh_ext:["db_oh"],skull:["db_skull"],hang_knee:["dead_bug","plank"]};
+/* ---- pictograms: [lines], head, weights, extras ---- */
+const FIG={
+ stand_curl:{l:[[60,20,60,44],[60,44,56,72],[60,44,64,72],[60,24,58,38],[58,38,70,28]],h:[60,13],w:[[71,27]]},
+ pushdown:{l:[[60,20,60,44],[60,44,56,72],[60,44,64,72],[60,24,62,38],[62,38,66,50],[66,50,72,4]],h:[60,13],w:[],c:[[66,50,72,4]]},
+ ohext:{l:[[60,20,60,44],[60,44,56,72],[60,44,64,72],[60,24,62,6],[62,6,52,14]],h:[60,13],w:[[51,15]]},
+ raise:{l:[[60,20,60,44],[60,44,52,72],[60,44,68,72],[60,24,36,26],[60,24,84,26]],h:[60,13],w:[[35,26],[85,26]]},
+ shrug:{l:[[60,20,60,44],[60,44,54,72],[60,44,66,72],[60,24,50,48],[60,24,70,48]],h:[60,13],w:[[50,50],[70,50]],a:[[86,40,86,22]]},
+ calf:{l:[[60,18,60,42],[60,42,54,64],[60,42,66,64],[54,64,54,70],[66,64,66,70],[60,22,50,44],[60,22,70,44]],h:[60,11],w:[[50,46],[70,46]],a:[[86,64,86,46]]},
+ vpress:{l:[[50,48,50,24],[50,48,72,48],[72,48,72,72],[50,26,56,14],[56,14,52,4],[40,4,64,4]],h:[50,18],w:[],seat:1},
+ vpull:{l:[[50,48,50,24],[50,48,72,48],[72,48,72,72],[50,26,40,14],[40,14,38,6],[30,6,74,6],[52,6,52,0]],h:[50,18],w:[],a:[[86,10,86,26]]},
+ srow:{l:[[40,52,40,28],[40,52,74,52],[74,52,92,60],[40,30,30,38],[30,38,50,40],[50,40,104,44]],h:[40,21],w:[]},
+ hpress:{l:[[30,46,72,46],[72,46,88,50],[88,50,92,72],[40,46,40,22],[30,22,50,22]],h:[24,44],w:[],bench:[24,52,96]},
+ incline:{l:[[72,52,40,30],[72,52,88,56],[88,56,92,72],[46,34,46,10],[36,10,56,10]],h:[35,26],w:[],ib:1},
+ fly:{l:[[30,46,72,46],[72,46,88,50],[88,50,92,72],[40,46,26,30],[40,46,54,30]],h:[24,44],w:[[25,29],[55,29]],bench:[24,52,96]},
+ row:{l:[[70,72,66,58],[66,58,70,44],[70,44,44,30],[48,32,62,24],[62,24,58,38]],h:[38,26],w:[[57,40]]},
+ arow:{l:[[30,30,36,44],[36,44,96,70],[36,44,30,30],[20,28,44,28]],h:[30,48],w:[]},
+ squat:{l:[[70,72,82,58],[82,58,58,54],[58,54,66,30],[66,32,78,38],[78,38,74,32]],h:[68,23],w:[[78,36]]},
+ hinge:{l:[[64,72,66,58],[66,58,62,44],[62,44,86,36],[84,38,84,60]],h:[93,33],w:[[84,62]],bar:[74,62,94,62]},
+ lunge:{l:[[82,72,82,56],[82,56,62,48],[62,48,48,64],[48,64,36,72],[62,48,62,24],[62,26,62,46]],h:[62,17],w:[[62,48]]},
+ plank:{l:[[30,66,30,52],[30,52,96,70],[30,66,40,66]],h:[22,48],w:[]},
+ pushup:{l:[[30,72,30,50],[30,50,96,70]],h:[22,46],w:[]},
+ hang:{l:[[40,6,80,6],[54,6,56,22],[66,6,64,22],[60,22,60,48],[60,48,58,72]],h:[60,30],w:[],nohead:0},
+ dip:{l:[[36,48,52,48],[68,48,84,48],[60,48,60,34],[60,34,52,40],[52,40,60,48],[60,34,60,58],[60,58,50,64],[50,64,56,74]],h:[60,26],w:[]},
+ bridge:{l:[[32,66,62,48],[62,48,82,52],[82,52,86,72],[32,66,20,66]],h:[22,62],w:[[62,44]]},
+ deadbug:{l:[[30,66,72,66],[40,66,40,42],[72,66,82,50],[82,50,92,50]],h:[24,62],w:[]},
+ handstand:{l:[[60,72,60,52],[60,52,60,30],[60,30,60,6]],h:[60,62],w:[],wall:1},
+ pike:{l:[[40,72,48,56],[48,56,66,34],[66,34,90,72]],h:[44,63],w:[]},
+ legext:{l:[[42,50,42,26],[42,50,66,50],[66,50,90,44]],h:[42,19],w:[],seat:1},
+ legcurl:{l:[[28,52,72,54],[72,54,90,54],[90,54,90,34]],h:[22,50],w:[],bench:[20,58,94]},
+ stepup:{l:[[70,52,70,40],[70,40,60,36],[60,36,60,14],[60,36,52,52],[52,52,52,72],[60,18,60,36]],h:[60,8],w:[[60,38]],box:1}
+};
+const EXFIG={bench:"hpress",chest_press:"hpress",db_bench:"hpress",db_floor:"hpress",skull:"hpress",db_skull:"hpress",incline_db:"incline",incline_curl:"stand_curl",
+ pec_deck:"fly",cable_fly:"fly",db_fly:"fly",db_pullover:"fly",dips_m:"dip",bench_dip:"dip",pulldown:"vpull",pullup:"hang",cable_row:"srow",face_pull:"srow",
+ db_row:"row",bb_row:"row",db_row2:"row",rear_delt:"row",db_rear:"row",straight_pd:"pushdown",db_ohp:"vpress",arnold:"vpress",lat_raise:"raise",shrug:"shrug",
+ goblet:"squat",smith_squat:"squat",bb_squat:"squat",hack:"squat",leg_press:"squat",db_squat:"squat",rdl:"hinge",deadlift:"hinge",db_rdl:"hinge",sl_rdl:"hinge",
+ hip_thrust:"bridge",db_hip:"bridge",lunges:"lunge",bulgarian:"lunge",step_up:"stepup",leg_ext:"legext",leg_curl:"legcurl",calf:"calf",db_calf:"calf",
+ bb_curl:"stand_curl",hammer:"stand_curl",cable_curl:"stand_curl",preacher:"stand_curl",db_curl:"stand_curl",conc_curl:"stand_curl",
+ pushdown:"pushdown",oh_ext:"ohext",db_oh:"ohext",db_kick:"pushdown",plank:"plank",dead_bug:"deadbug",hang_knee:"hang"};
+function cpFig(mv,i){const en=CP[mv].l[i][1].toLowerCase();
+ if(mv==="push")return"pushup";if(mv==="dips")return"dip";if(mv==="skill")return"handstand";if(mv==="row")return"arow";
+ if(mv==="pull")return en.includes("australian")?"arow":"hang";
+ if(mv==="legs")return en.includes("split")?"lunge":"squat";
+ if(mv==="legs2")return en.includes("bridge")?"bridge":"hinge";
+ if(mv==="pike")return en.includes("handstand")?"handstand":"pike";
+ if(mv==="core")return en.includes("hang")||en.includes("l sit")?"hang":en.includes("hollow")||en.includes("dragon")?"deadbug":"plank";
+ return"plank";}
+function figSVG(k){const f=FIG[k]||FIG.plank;let g="";
+ if(f.bench)g+=`<line x1="${f.bench[0]}" y1="${f.bench[1]}" x2="${f.bench[2]}" y2="${f.bench[1]}" stroke="var(--muted)" stroke-width="4"/><line x1="${f.bench[0]+6}" y1="${f.bench[1]}" x2="${f.bench[0]+6}" y2="72" stroke="var(--muted)" stroke-width="2"/><line x1="${f.bench[2]-6}" y1="${f.bench[1]}" x2="${f.bench[2]-6}" y2="72" stroke="var(--muted)" stroke-width="2"/>`;
+ if(f.ib)g+=`<line x1="34" y1="28" x2="80" y2="56" stroke="var(--muted)" stroke-width="4"/><line x1="76" y1="56" x2="76" y2="72" stroke="var(--muted)" stroke-width="2"/>`;
+ if(f.seat)g+=`<line x1="36" y1="52" x2="70" y2="52" stroke="var(--muted)" stroke-width="4"/><line x1="36" y1="52" x2="36" y2="20" stroke="var(--muted)" stroke-width="3"/><line x1="52" y1="52" x2="52" y2="72" stroke="var(--muted)" stroke-width="2"/>`;
+ if(f.wall)g+=`<line x1="70" y1="2" x2="70" y2="74" stroke="var(--muted)" stroke-width="3"/>`;
+ if(f.box)g+=`<rect x="62" y="52" width="26" height="20" fill="none" stroke="var(--muted)" stroke-width="2.5"/>`;
+ g+=`<line x1="4" y1="74" x2="116" y2="74" stroke="var(--line)" stroke-width="2"/>`;
+ (f.c||[]).forEach(c=>g+=`<line x1="${c[0]}" y1="${c[1]}" x2="${c[2]}" y2="${c[3]}" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="3 3"/>`);
+ f.l.forEach(x=>{if(f.c&&f.c.some(c=>c.join()===x.join()))return;g+=`<line x1="${x[0]}" y1="${x[1]}" x2="${x[2]}" y2="${x[3]}" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>`;});
+ if(f.bar)g+=`<line x1="${f.bar[0]}" y1="${f.bar[1]}" x2="${f.bar[2]}" y2="${f.bar[3]}" stroke="var(--plate)" stroke-width="3"/>`;
+ g+=`<circle cx="${f.h[0]}" cy="${f.h[1]}" r="6.5" fill="currentColor"/>`;
+ (f.w||[]).forEach(w=>g+=`<rect x="${w[0]-7}" y="${w[1]-3.5}" width="14" height="7" rx="2" fill="var(--plate)"/>`);
+ (f.a||[]).forEach(a=>g+=`<line x1="${a[0]}" y1="${a[1]}" x2="${a[2]}" y2="${a[3]}" stroke="var(--plate)" stroke-width="2.5"/><path d="M${a[2]-4} ${a[3]+5}L${a[2]} ${a[3]}L${a[2]+4} ${a[3]+5}" fill="none" stroke="var(--plate)" stroke-width="2.5"/>`);
+ return `<svg class="fig" viewBox="0 0 120 78" aria-hidden="true">${g}</svg>`;}
+const GYM={
+ FB_A:{n:"جسم كامل A",x:["SQ","BENCH","pulldown","db_ohp","cable_row","leg_curl","plank"]},
+ FB_B:{n:"جسم كامل B",x:["leg_press","incline_db","ROW","lat_raise","rdl","pushdown","dead_bug"]},
+ UP_A:{n:"Upper A",x:["BENCH","pulldown","db_ohp","cable_row","lat_raise","bb_curl","pushdown"]},
+ LO_A:{n:"Lower A",x:["SQ","rdl","leg_press","leg_curl","calf","plank"]},
+ UP_B:{n:"Upper B",x:["incline_db","ROW","arnold","cable_fly","face_pull","hammer","oh_ext"]},
+ LO_B:{n:"Lower B",x:["hack","hip_thrust","lunges","leg_ext","calf","hang_knee"]},
+ CB:{n:"صدر + باي",x:["BENCH","incline_db","chest_press","pec_deck","bb_curl","hammer","cable_curl"]},
+ BT:{n:"ضهر + تراي",x:["pulldown","cable_row","ROW","straight_pd","pushdown","oh_ext","dips_m"]},
+ LG:{n:"رجل",x:["SQ","rdl","leg_press","leg_ext","leg_curl","calf","plank"]},
+ SH:{n:"كتف",x:["db_ohp","lat_raise","rear_delt","face_pull","shrug","dead_bug"]},
+ AR:{n:"دراع كامل",x:["bb_curl","preacher","hammer","oh_ext","skull","pushdown"]},
+ PU:{n:"Push",x:["BENCH","incline_db","db_ohp","lat_raise","cable_fly","pushdown","oh_ext"]},
+ PL:{n:"Pull",x:["PULL","ROW","cable_row","face_pull","rear_delt","bb_curl","hammer"]}
+};
+/* calisthenics progressions: [ar,en,target] target r=reps s=seconds */
+const CP={
+ push:{n:"ضغط",l:[["ضغط على الحيطة","Wall push up","r"],["ضغط مايل على ترابيزة","Incline push up","r"],["ضغط على الركبة","Knee push up","r"],["ضغط كامل","Push up","r"],["ضغط دايموند","Diamond push up","r"],["ضغط أرتشر","Archer push up","r"],["سودو بلانش بوش أب","Pseudo planche push up","r"],["ضغط بإيد واحدة (تدريجي)","One arm push up progression","r"]]},
+ pull:{n:"عقلة",l:[["تعليق على العقلة","Dead hang","s"],["عقلة كتف (سكابيولا)","Scapular pull up","r"],["أستراليان رو","Australian pull up row","r"],["عقلة نزول بطيء","Negative pull up","r"],["عقلة كاملة","Pull up","r"],["عقلة وسع","Wide grip pull up","r"],["عقلة L-sit","L sit pull up","r"],["مسل أب (تدريجي)","Muscle up progression","r"]]},
+ dips:{n:"ديبس",l:[["ديبس على الكرسي","Bench dip","r"],["ديبس نزول بطيء","Negative parallel bar dip","r"],["ديبس متوازي","Parallel bar dip","r"],["ديبس على البار المستقيم","Straight bar dip","r"],["ديبس بوزن زيادة","Weighted dip","r"]]},
+ legs:{n:"رجل",l:[["سكوات على كرسي","Box squat bodyweight","r"],["سكوات بوزن الجسم","Bodyweight squat","r"],["سبليت سكوات","Split squat","r"],["بلغاري سبليت سكوات","Bulgarian split squat","r"],["شريمب سكوات","Shrimp squat","r"],["بيستول سكوات","Pistol squat","r"]]},
+ legs2:{n:"خلفية الرجل",l:[["جلوت بريدج","Glute bridge","r"],["جلوت بريدج برجل واحدة","Single leg glute bridge","r"],["رومانيان برجل واحدة","Single leg romanian deadlift bodyweight","r"],["نوردك كيرل نزول بطيء","Nordic curl negative","r"]]},
+ pike:{n:"كتف",l:[["بايك بلانك","Pike hold","s"],["بايك بوش أب","Pike push up","r"],["بايك مرفوع الرجل","Elevated pike push up","r"],["هاند ستاند بوش أب نزول","Wall handstand push up negative","r"],["هاند ستاند بوش أب على الحيطة","Wall handstand push up","r"]]},
+ row:{n:"سحب أفقي",l:[["أستراليان رو عالي","High australian row","r"],["أستراليان رو واطي","Australian row","r"],["أستراليان رو رجل مرفوعة","Feet elevated australian row","r"],["أرتشر رو","Archer row","r"]]},
+ core:{n:"بطن",l:[["بلانك","Plank","s"],["هولو بودي","Hollow body hold","s"],["رفع الركبة متعلق","Hanging knee raise","r"],["رفع الرجل متعلق","Hanging leg raise","r"],["L-sit","L sit hold","s"],["دراجون فلاج","Dragon flag","r"]]},
+ skill:{n:"مهارة",l:[["وقفة وش للحيطة","Wall walk","s"],["هاند ستاند ضهر للحيطة","Wall handstand hold","s"],["هاند ستاند وش للحيطة","Chest to wall handstand","s"],["هاند ستاند حر","Freestanding handstand","s"]]}
+};
+const CAL={
+ CFB:{n:"جسم كامل",x:["push","pull","legs","dips","legs2","core"]},
+ CUP:{n:"Upper",x:["pull","push","row","dips","pike","core"]},
+ CLO:{n:"Lower + بطن",x:["legs","legs2","legs","core","core"]},
+ CPU:{n:"Push",x:["push","dips","pike","push","core"]},
+ CPL:{n:"Pull",x:["pull","row","pull","core"]},
+ CSK:{n:"رجل + مهارة",x:["skill","legs","legs2","core"]}
+};
+Object.assign(EX,{bb_ohp:["أوفرهيد بريس بالبار","Barbell overhead press","c"]});
+Object.assign(GYM,{
+ CK:{n:"صدر + ضهر",x:["BENCH","PULL","incline_db","ROW","cable_fly","straight_pd"]},
+ SA:{n:"كتف + دراع",x:["db_ohp","lat_raise","rear_delt","bb_curl","pushdown","hammer","oh_ext"]},
+ UPP:{n:"Upper قوة",m:"power",x:["bench","bb_row","db_ohp","PULL","bb_curl","skull"]},
+ LOP:{n:"Lower قوة",m:"power",x:["bb_squat","deadlift","leg_press","leg_curl","calf"]},
+ S5A:{n:"5×5 — يوم A",m:"5x5",x:["bb_squat","bench","bb_row"]},
+ S5B:{n:"5×5 — يوم B",m:"5x5",x:["bb_squat","bb_ohp","deadlift"]},
+ GV1:{n:"10×10 صدر + ضهر",m:"gvt",x:["incline_db","pulldown","cable_fly","db_row"]},
+ GV2:{n:"10×10 رجل + بطن",m:"gvt",x:["SQ","leg_curl","calf","hang_knee"]},
+ GV3:{n:"10×10 كتف + دراع",m:"gvt",x:["dips_m","bb_curl","lat_raise","rear_delt"]},
+ HA:{n:"HIT — يوم A",m:"hit",x:["leg_press","leg_curl","chest_press","pulldown","db_ohp","bb_curl"]},
+ HB:{n:"HIT — يوم B",m:"hit",x:["hack","rdl","incline_db","cable_row","lat_raise","pushdown"]},
+ CI1:{n:"دايرة حرق A",m:"circuit",x:["goblet","chest_press","cable_row","lunges","db_ohp","plank"]},
+ CI2:{n:"دايرة حرق B",m:"circuit",x:["leg_press","incline_db","pulldown","db_rdl","lat_raise","dead_bug"]}
+});
+HOME.bb_ohp=["db_ohp"];EXFIG.bb_ohp="vpress";
+const SCHOOLS={
+ auto:{n:"اختيار سوبر فت (مُستحسن)",d:"التطبيق بيختار أنسب تقسيم لأيامك وهدفك ومستواك",min:0},
+ fullbody:{n:"Full Body",d:"كل الجسم في كل حصة. ممتاز للي وقته قليل أو راجع من انقطاع",min:0,days:[2,3,4],plan:n=>n===2?["FB_A","FB_B"]:n===3?["FB_A","FB_B","FB_A"]:["FB_A","FB_B","FB_A","FB_B"]},
+ ul:{n:"Upper / Lower",d:"يوم للنص اللي فوق ويوم للرجل، وكل عضلة مرتين في الأسبوع",min:0,days:[4],plan:()=>["UP_A","LO_A","UP_B","LO_B"]},
+ bro:{n:"عضلتين في اليوم",d:"الكلاسيكي: صدر+باي، ضهر+تراي، رجل، كتف، دراع",min:1,days:[5],plan:()=>["CB","BT","LG","SH","AR"]},
+ ppl:{n:"Push / Pull / Legs",d:"دفع، سحب، رجل. 3 أيام، أو 6 أيام وكل عضلة مرتين",min:1,days:[3,6],plan:n=>n===3?["PU","PL","LG"]:["PU","PL","LG","PU","PL","LG"]},
+ pplul:{n:"PPL + Upper/Lower",d:"دفع وسحب ورجل، وبعدهم يوم فوق ويوم رجل",min:1,days:[5],plan:()=>["PU","PL","LG","UP_A","LO_B"]},
+ arnold:{n:"تقسيم أرنولد",d:"صدر+ضهر، كتف+دراع، رجل — مرتين في الأسبوع. حجم تمرين عالي",min:2,days:[6],plan:()=>["CK","SA","LG","CK","SA","LG"]},
+ phul:{n:"PHUL قوة وضخامة",d:"يومين قوة بأوزان تقيلة ويومين ضخامة",min:1,days:[4],gym:1,nojoint:1,plan:()=>["UPP","LOP","UP_B","LO_B"]},
+ s5x5:{n:"5×5 قوة",d:"3 تمارين أساسية، 5 مجموعات × 5 عدات، وتزوّد الوزن كل حصة",min:1,days:[3],gym:1,nojoint:1,plan:(n,wk)=>wk%2?["S5A","S5B","S5A"]:["S5B","S5A","S5B"]},
+ gvt:{n:"German Volume 10×10",d:"10 مجموعات × 10 عدات في أول تمرينين. مرهق جدًا، استخدمه 6 أسابيع بس",min:2,days:[3,4],risky:1,plan:n=>n===3?["GV1","GV2","GV3"]:["GV1","GV2","GV3","GV1"]},
+ hit:{n:"Heavy Duty (HIT)",d:"مدرسة مايك منتزر: مجموعة أو اتنين لحد الفشل الكامل، وراحة طويلة",min:2,days:[2,3],gym:1,risky:1,plan:n=>n===2?["HA","HB"]:["HA","HB","HA"]},
+ circuit:{n:"دوائر حرق",d:"تمارين ورا بعض براحة قليلة. بتحرق كتير وبتحسّن النَفَس",min:0,days:[3,4],plan:n=>n===3?["CI1","CI2","CI1"]:["CI1","CI2","CI1","CI2"]},
+ calis:{n:"كاليستنكس",d:"وزن جسمك بس، بمستويات من الضغط على الحيطة لحد المسل أب",min:0}
+};
+function schoolOk(k,p){const s=SCHOOLS[k];if(!s)return false;
+  if(k==="auto"||k==="calis")return true;
+  if(p.place==="none")return false;
+  if(p.level<s.min)return false;
+  if(s.days&&!s.days.includes(p.days))return false;
+  if(s.gym&&p.place!=="gym")return false;
+  if(s.risky&&capped(p))return false;
+  if(s.nojoint&&p.health.includes("joint"))return false;
+  return true;}
+function schools(p){return Object.keys(SCHOOLS).filter(k=>schoolOk(k,p));}
+const WEEK=["السبت","الأحد","الاتنين","التلات","الأربع","الخميس","الجمعة"];
+const DAYSETS={2:[0,3],3:[0,2,4],4:[0,1,3,4],5:[0,1,2,4,5],6:[0,1,2,3,4,5]};
+const HEALTH=[
+ ["heart","مشكلة في القلب أو ضربات غير منتظمة"],
+ ["chest","ألم أو ضغط في الصدر مع المجهود"],
+ ["dizzy","دوخة شديدة أو إغماء قبل كده"],
+ ["bp","ضغط عالي"],
+ ["sugar","سكر أو ما قبل السكر"],
+ ["lipids","كوليسترول أو دهون ثلاثية عالية"],
+ ["liver","دهون على الكبد"],
+ ["uric","حمض يوريك عالي أو نقرس"],
+ ["joint","إصابة أو ألم في الضهر أو المفاصل"],
+ ["preg","حامل أو بعد ولادة قريبة"]
+];
+const RISK=["heart","chest","dizzy","bp","preg"];
+
+/* ================= STATE + STORAGE ================= */
+const KEY="superfit-v1";
+let S={profile:null,log:{w:{},weights:[],water:{},checks:{}},prog:{},start:null,updated:0};
+try{const raw=localStorage.getItem(KEY);if(raw)S=Object.assign(S,JSON.parse(raw));}catch(e){}
+let DB=null,UID=null,dbTimer=null;
+function save(){
+  S.updated=Date.now();
+  try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+  if(DB&&UID){clearTimeout(dbTimer);dbTimer=setTimeout(()=>{
+    DB.doc("data/users/"+UID+"/state").set({json:JSON.stringify(S),updated:S.updated}).catch(()=>{});
+  },1200);}
+}
+(async()=>{
+  try{
+    if(!window.claude||!window.claude.use)return;
+    const [db,user]=await Promise.all([claude.use("db"),claude.use("user")]);
+    if(!db||!user)return;
+    const id=await user.id(); if(!id)return;
+    DB=db;UID=id;
+    const snap=await db.doc("data/users/"+id+"/state").get();
+    if(snap.exists){const d=snap.data();
+      if(d&&d.updated>S.updated){try{S=Object.assign(S,JSON.parse(d.json));localStorage.setItem(KEY,JSON.stringify(S));render();}catch(e){}}}
+    else if(S.profile){save();}
+  }catch(e){DB=null;}
+})();
+
+/* ================= HELPERS ================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const todayKey=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
+const weekIdx=d=>[1,2,3,4,5,6,0][(d||new Date()).getDay()]; /* Sat=0 */
+function tm(mins){mins=((Math.round(mins)%1440)+1440)%1440;let h=Math.floor(mins/60),m=mins%60;const ap=h<12?"ص":"م";h=h%12||12;return h+":"+String(m).padStart(2,"0")+" "+ap;}
+const toMin=t=>{if(!t)return null;const[a,b]=t.split(":").map(Number);return a*60+b;};
+function linkBtns(en){const q=encodeURIComponent(en+" exercise"),v=encodeURIComponent(en+" proper form");
+  return `<div class="links"><a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">📷 صورة</a><a href="https://www.youtube.com/results?search_query=${v}" target="_blank" rel="noopener">▶ فيديو</a></div>`;}
+
+/* ================= ENGINE ================= */
+function P(){return S.profile;}
+function bmi(p){return p.w/((p.h/100)**2);}
+function flagged(p){return RISK.some(k=>p.health.includes(k));}
+function capped(p){return flagged(p)&&!p.cleared;}
+function weekNo(){if(!S.start)return 1;return Math.max(1,Math.floor((Date.now()-new Date(S.start).getTime())/(7*864e5))+1);}
+function cyclePhase(){const w=((weekNo()-1)%6)+1;
+  if(w===1)return{k:"intro",n:"أسبوع تعوّد",d:"مجموعة أقل وشدة أخف علشان جسمك يتعود"};
+  if(w===6)return{k:"deload",n:"أسبوع تخفيف",d:"نص المجموعات علشان جسمك يستشفى ويطلع أقوى"};
+  return{k:"build",n:"أسبوع بناء ("+(w-1)+" من 4)",d:"زوّد الوزن أو العدات شوية عن الأسبوع اللي فات"};}
+function split(p){
+  const n=p.days;
+  if(p.school&&p.school!=="auto"&&p.school!=="calis"&&schoolOk(p.school,p))return SCHOOLS[p.school].plan(n,weekNo());
+  if(p.goal==="calis"||p.place==="none"||p.school==="calis"){
+    if(n<=3)return Array(n).fill("CFB");
+    if(n===4)return["CUP","CLO","CUP","CLO"];
+    if(n===5)return["CPU","CPL","CLO","CUP","CSK"];
+    return["CPU","CPL","CLO","CPU","CPL","CSK"];
+  }
+  if(n<=3)return n===2?["FB_A","FB_B"]:["FB_A","FB_B","FB_A"];
+  if(n===4)return["UP_A","LO_A","UP_B","LO_B"];
+  if(n===5)return["CB","BT","LG","SH","AR"];
+  return["PU","PL","LG","PU","PL","LG"];
+}
+function planFor(dayIdx){const p=P();const ds=DAYSETS[p.days];const i=ds.indexOf(dayIdx);return i<0?null:split(p)[i];}
+function resolve(k,p,used){
+  const L=p.level,j=p.health.includes("joint");let r=k;
+  if(k==="SQ")r=L===0||j?"goblet":L===1?"smith_squat":"bb_squat";
+  else if(k==="BENCH")r=L===0?"chest_press":"bench";
+  else if(k==="ROW")r=L<=1||j?"db_row":"bb_row";
+  else if(k==="PULL")r=L<=1?"pulldown":"pullup";
+  else if(k==="rdl"&&p.goal==="strength"&&L>=2&&!j)r="deadlift";
+  else if(k==="skull"&&L===0)r="oh_ext";
+  if(p.place==="home"&&HOME[r]){const alts=HOME[r];r=alts.find(a=>!used||!used.has(a))||alts[0];}
+  else if(used&&used.has(r)){const alt={db_row:"cable_row",cable_row:"db_row",oh_ext:"pushdown",pushdown:"oh_ext"}[r];if(alt&&!used.has(alt))r=alt;}
+  if(used)used.add(r);return r;
+}
+function dose(key,p,mode,pos){
+  const role=EX[key][2],L=p.level,ph=cyclePhase().k;
+  const adj=n=>ph==="intro"?Math.max(1,Math.round(n*0.7)):ph==="deload"?Math.max(1,Math.ceil(n/2)):n;
+  if(mode&&role!=="h"){
+    if(mode==="5x5"){const dl=key==="deadlift"||key==="db_rdl";return{sets:adj(dl?1:5),reps:"5",rest:"3 دقايق",restS:180,rir:ph==="build"?"لو خلصت كل العدات، زوّد 2.5 كجم الحصة الجاية (ديدليفت 5 كجم)":"وزن أخف من المعتاد"};}
+    if(mode==="power"&&role==="c")return{sets:adj(4),reps:"3–5",rest:"3 دقايق",restS:180,rir:ph==="build"?"سيب عدة أو اتنين، وزوّد الوزن لما توصل 5 عدات في كل المجموعات":"وزن أخف من المعتاد"};
+    if(mode==="gvt")return pos<2?{sets:adj(10),reps:"10",rest:"90 ثانية",restS:90,rir:"وزن تقدر تعمل بيه حوالي 20 عدة. لو وقعت تحت 10، كمّل بنفس الوزن"}:{sets:adj(3),reps:"10–12",rest:"60 ثانية",restS:60,rir:"سيب 2 عدة"};
+    if(mode==="hit")return{sets:L>=3?2:1,reps:"6–10",rest:"2–3 دقايق",restS:150,rir:ph==="build"?"لحد الفشل الكامل بتكنيك نضيف، ونزّل الوزن في 4 ثواني":"سيب 2 عدة الأسبوع ده"};
+    if(mode==="circuit")return{sets:adj(3),reps:"12–15",rest:"15 ثانية وروح للي بعده",restS:15,rir:"دورة = كل التمارين ورا بعض. ارتاح 90 ثانية بعد كل دورة"};
+  }
+  let sets=[2,3,3,4,4][L];if(role==="i")sets=Math.max(2,sets-1);
+  if(ph==="intro")sets=Math.max(2,sets-1);if(ph==="deload")sets=Math.max(1,Math.ceil(sets/2));
+  let reps;
+  if(role==="h")reps=["20–30 ث","30–40 ث","40–60 ث","45–60 ث","60 ث"][L];
+  else if(L===0)reps="12–15";
+  else if(p.goal==="strength"&&role==="c")reps=L>=2?"4–6":"6–8";
+  else if(p.goal==="fat"||p.goal==="health")reps=role==="c"?"10–12":"12–15";
+  else reps=role==="c"?"8–10":"10–15";
+  let rest=role==="c"?(p.goal==="strength"&&L>=2?"3 دقايق":"2 دقيقة"):"60–75 ثانية";if(role==="h")rest="45 ثانية";
+  const restS=role==="c"?(p.goal==="strength"&&L>=2?180:120):role==="h"?45:70;
+  let rir=["سيب 3–4 عدات في إيدك","سيب 2–3 عدات","سيب 1–2 عدة","آخر مجموعة لحد الفشل في الأجهزة بس","آخر مجموعة لحد الفشل في المعزول"][L];
+  if(capped(p)||ph!=="build")rir="سيب 3 عدات على الأقل، من غير فشل";
+  return{sets,reps,rest,restS,rir};
+}
+function calDose(mv,p){
+  const len=CP[mv].l.length;let base=[0,1,3,4,5][p.level];if(mv==="skill")base-=2;
+  const idx=S.prog[mv]!=null?S.prog[mv]:Math.max(0,Math.min(len-1,base));
+  const it=CP[mv].l[idx];const ph=cyclePhase().k;
+  let sets=[2,3,3,4,5][p.level];if(ph==="intro")sets=Math.max(2,sets-1);if(ph==="deload")sets=Math.max(1,Math.ceil(sets/2));
+  const reps=it[2]==="s"?["10–20 ث","20–30 ث","30–45 ث","45–60 ث","60 ث"][p.level]:(p.goal==="strength"?"5–8":"8–12");
+  return{idx,it,sets,reps,restS:90,last:idx>=CP[mv].l.length-1,first:idx===0};
+}
+function cardio(p,train){
+  const b=bmi(p),wk=weekNo(),cap=capped(p);
+  let inc=b>=30?(wk<=2?3:wk<=4?5:8):(wk<=2?5:wk<=4?8:10);
+  let sp=b>=30?"5–5.5":"5.5–6";
+  let min=p.goal==="fat"?(train?25:40):p.goal==="health"?(train?20:35):(train?15:25);
+  let txt=`مشاية بميل ${inc}% وسرعة ${sp} كم/س لمدة ${min} دقيقة، من غير ما تمسك في الأيادي.`;
+  if(!cap&&p.level>=1&&b<30&&!train)txt+=" ولو حابب: 8 مرات (دقيقة سريع + دقيقتين عادي) بدل المشي الثابت.";
+  return{inc,min,txt};
+}
+function nutrition(p){
+  const male=p.sex==="m";
+  const bmr=10*p.w+6.25*p.h-5*p.age+(male?5:-161);
+  const act=Math.min(1.75,1.2+0.06*p.days+({desk:0,mid:0.08,phys:0.18}[p.job]||0));
+  const tdee=bmr*act;const b=bmi(p);
+  let kcal=tdee,why="";
+  if(p.age<18){kcal=tdee;why="سنك أقل من 18، فالأكل على قد احتياجك من غير عجز، وركّز على الأكل الصحي والتمرين.";}
+  else if(p.goal==="fat"){kcal=tdee*(b>=30?0.75:0.8);why="عجز محسوب علشان تنزل دهون وتحافظ على العضل.";}
+  else if(p.goal==="muscle"){kcal=b>=27?tdee*0.9:tdee*1.1;why=b>=27?"عندك دهون زيادة، فهنعمل عجز بسيط وانت بتبني عضل (Recomp).":"زيادة بسيطة علشان عضل من غير دهون كتير.";}
+  else if(p.goal==="health"){kcal=b>=25?tdee*0.85:tdee;why=b>=25?"عجز بسيط علشان الوزن ينزل بالراحة.":"على قد احتياجك.";}
+  else{kcal=b>=28?tdee*0.85:tdee*1.03;why=b>=28?"عجز بسيط مع تمرين القوة.":"على قد احتياجك وزيادة صغيرة للأداء.";}
+  const floor=Math.max(bmr,male?1500:1200);if(kcal<floor){kcal=floor;}
+  kcal=Math.round(kcal/50)*50;
+  const ref=b>27?25*((p.h/100)**2):p.w;
+  const prot=Math.round(ref*(p.level===0?1.8:2.0));
+  const fat=Math.round(kcal*0.27/9);
+  const carb=Math.max(0,Math.round((kcal-prot*4-fat*9)/4));
+  const meals=kcal>=2600?5:4;
+  const lossWk=p.goal==="fat"?Math.min(1,p.w*0.0075).toFixed(1):null;
+  return{bmr:Math.round(bmr),tdee:Math.round(tdee),kcal,prot,fat,carb,meals,why,lossWk};
+}
+function sleepPlan(p){
+  const need=p.age<18?9:p.age>=65?7.5:8;
+  const wake=toMin(p.wake)||420;const bed=wake-need*60;
+  return{need,wake,bed,caf:bed-8*60,screens:bed-60};
+}
+function waterL(p,train){return Math.min(4.5,Math.round((p.w*0.035+(train?0.5:0))*10)/10);}
+function timeline(p,train){
+  const sp=sleepPlan(p),wake=sp.wake,gym=toMin(p.gymTime)||1200;
+  const items=[[wake,"اصحى واشرب كوبايتين مية",""]];
+  mealSlots(p,train).forEach(m=>items.push([m.t,"🍽️ "+MTYPE[m.k],""]));
+  if(train)items.push([gym,"التمرين 🏋️","gym"]);
+  (p.meds||[]).forEach(m=>{const t=toMin(m.t);if(t!=null)items.push([t,"💊 "+m.n,""]);});
+  items.push([sp.caf,"آخر قهوة أو شاي النهارده",""]);
+  items.push([sp.screens,"اقفل الموبايل وقلّل الإضاءة",""]);
+  items.push([sp.bed,"نوم 😴 ("+sp.need+" ساعات)",""]);
+  return items.map(x=>[x[0],x[1],x[2],((x[0]%1440)+1440)%1440]).sort((a,b)=>((a[0]-wake+1440)%1440)-((b[0]-wake+1440)%1440));
+}
+
+/* ================= MEALS ================= */
+const NOFOOD=[["fish","سمك وتونة"],["beef","لحمة حمرا"],["egg","بيض"],["dairy","ألبان وجبن وزبادي"],["legume","فول وعدس"]];
+/* key:[ar,p,c,f per100g,unit,unitG,max g] */
+const FD={
+ chicken:["صدور فراخ مشوية",31,0,3.6,"g",1,350], fish:["سمك فيليه أو بلطي مشوي",24,0,3,"g",1,350],
+ tuna:["تونة مصفاة بالمية",25,0,1,"g",1,240], beef:["لحمة حمرا قليلة الدهن",26,0,9,"g",1,300],
+ egg:["بيض كامل",12.6,0.8,10,"egg",50,200], white:["بياض بيض",11,0.7,0,"white",33,330],
+ cottage:["جبنة قريش",12,3,3,"g",1,400], greek:["زبادي يوناني لايت",10,4,0.5,"g",1,400],
+ milk:["لبن خالي الدسم",3.4,5,0.1,"ml",1,400], whey:["واي بروتين",80,7,5,"scoop",30,60],
+ foul:["فول مدمس",8,15,0.6,"g",1,300], lentil:["عدس مطبوخ",9,20,0.4,"g",1,300],
+ rice:["رز مطبوخ",2.7,28,0.3,"g",1,450], pasta:["مكرونة سن مطبوخة",6,30,1,"g",1,400],
+ bread:["عيش بلدي أو سن",9,50,2,"loaf",100,250], toast:["توست أسمر",10,45,3,"slice",30,150],
+ oats:["شوفان",13,67,7,"g",1,140], potato:["بطاطس مشوية أو مسلوقة",2,17,0.1,"g",1,600],
+ sweetp:["بطاطا مشوية",1.6,20,0.1,"g",1,500], banana:["موز",1.1,23,0.3,"piece",120,240],
+ apple:["تفاح أو جوافة",0.3,14,0.2,"piece",180,360], dates:["بلح",2,75,0.4,"piece",8,64],
+ honey:["عسل نحل",0,82,0,"tsp",7,21], oil:["زيت زيتون",0,0,100,"tbsp",10,30],
+ nuts:["مكسرات",20,20,50,"g",1,40], pb:["زبدة فول سوداني",25,20,50,"tbsp",16,32],
+ tahina:["طحينة",17,10,54,"tbsp",15,30],
+ salad:["سلطة خضرا كبيرة","free"], veg:["خضار سوتيه أو مسلوق","free"], sauce:["صوص طماطم بيتي","free"], cuke:["خيار وطماطم","free"]
+};
+const MT={
+ breakfast:[
+  {n:"فول وبيض وعيش",P:"white",C:"bread",F:"oil",fx:[["egg",100],["foul",150]],fr:["cuke"],t:["egg","legume"]},
+  {n:"شوفان باللبن والواي",P:"whey",C:"oats",F:"pb",fx:[["milk",250],["banana",120]],t:["dairy"]},
+  {n:"جبنة قريش وبيض وعيش",P:"cottage",C:"bread",F:"oil",fx:[["egg",100]],fr:["cuke"],t:["dairy","egg"]},
+  {n:"أومليت بياض بالخضار وتوست",P:"white",C:"toast",F:"oil",fx:[["egg",50]],fr:["veg"],t:["egg"]},
+  {n:"زبادي يوناني بالشوفان والفاكهة",P:"greek",C:"oats",F:"nuts",fx:[["apple",180]],t:["dairy"]},
+  {n:"صدور فراخ وعيش وخيار",P:"chicken",C:"bread",F:"oil",fr:["cuke"],t:[]}],
+ lunch:[
+  {n:"فراخ مشوية ورز وسلطة",P:"chicken",C:"rice",F:"oil",fr:["salad","veg"],t:[]},
+  {n:"سمك مشوي ورز وسلطة طحينة",P:"fish",C:"rice",F:"tahina",fr:["salad"],t:["fish"]},
+  {n:"مكرونة سن بالفراخ والصوص",P:"chicken",C:"pasta",F:"oil",fr:["sauce","salad"],t:[]},
+  {n:"فراخ وبطاطس مشوية وخضار",P:"chicken",C:"potato",F:"oil",fr:["veg"],t:[]},
+  {n:"لحمة قليلة الدهن وبطاطا وسلطة",P:"beef",C:"sweetp",F:null,fr:["salad"],t:["beef"],ex:["uric","lipids"]},
+  {n:"عدس وفراخ وعيش",P:"chicken",C:"bread",F:"oil",fx:[["lentil",200]],fr:["salad"],t:["legume"]}],
+ dinner:[
+  {n:"تونة وعيش وسلطة",P:"tuna",C:"bread",F:"oil",fr:["salad"],t:["fish"]},
+  {n:"جبنة قريش وخيار وعيش",P:"cottage",C:"bread",F:"oil",fr:["cuke"],t:["dairy"]},
+  {n:"بيض مسلوق وسلطة وعيش",P:"white",C:"bread",F:"oil",fx:[["egg",100]],fr:["salad"],t:["egg"]},
+  {n:"زبادي يوناني وشوفان",P:"greek",C:"oats",F:"nuts",t:["dairy"]},
+  {n:"صدور فراخ وسلطة كبيرة وعيش",P:"chicken",C:"bread",F:"oil",fr:["salad"],t:[]}],
+ snack:[
+  {n:"زبادي يوناني وفاكهة",P:"greek",C:"apple",F:"nuts",t:["dairy"]},
+  {n:"جبنة قريش وتفاحة",P:"cottage",C:"apple",F:null,t:["dairy"]},
+  {n:"واي بروتين وموزة",P:"whey",C:"banana",F:"nuts",t:["dairy"]},
+  {n:"بيض مسلوق وتوست",P:"white",C:"toast",F:null,fx:[["egg",50]],t:["egg"]},
+  {n:"تونة وتوست",P:"tuna",C:"toast",F:null,t:["fish"]},
+  {n:"صدور فراخ وتفاحة",P:"chicken",C:"apple",F:null,t:[]}],
+ pre:[
+  {n:"شوفان بالزبادي اليوناني وموزة",P:"greek",C:"oats",F:null,fx:[["banana",120]],t:["dairy"]},
+  {n:"عيش بالعسل وجبنة قريش",P:"cottage",C:"bread",F:null,fx:[["honey",14]],t:["dairy"],ex:["sugar"]},
+  {n:"بلح وزبادي يوناني",P:"greek",C:"dates",F:null,t:["dairy"],ex:["sugar"]},
+  {n:"توست وتونة وموزة",P:"tuna",C:"toast",F:null,fx:[["banana",120]],t:["fish"]},
+  {n:"توست وبياض بيض وموزة",P:"white",C:"toast",F:null,fx:[["banana",120]],t:["egg"]},
+  {n:"عيش وصدور فراخ وموزة",P:"chicken",C:"bread",F:null,fx:[["banana",120]],t:[]}],
+ post:[
+  {n:"فراخ مشوية ورز",P:"chicken",C:"rice",F:"oil",fr:["salad"],t:[]},
+  {n:"واي بروتين وموزة وعيش",P:"whey",C:"bread",F:null,fx:[["banana",120]],t:["dairy"]},
+  {n:"سمك وبطاطس مشوية",P:"fish",C:"potato",F:"oil",fr:["salad"],t:["fish"]},
+  {n:"مكرونة سن بالتونة",P:"tuna",C:"pasta",F:"oil",fr:["sauce"],t:["fish"]},
+  {n:"صدور فراخ وبطاطا",P:"chicken",C:"sweetp",F:"oil",fr:["veg"],t:[]}]
+};
+const MTYPE={breakfast:"الفطار",lunch:"الغدا",dinner:"العشا",snack:"سناك",pre:"قبل التمرين",post:"بعد التمرين"};
+const MW={breakfast:[1,1,1],lunch:[1.2,1.2,1.2],dinner:[1,0.8,1],snack:[0.6,0.6,0.6],pre:[0.7,1.1,0.3],post:[1.1,1.3,0.4]};
+function mealSlots(p,train){
+  const sp=sleepPlan(p),n=nutrition(p),wake=sp.wake,awake=1440-sp.need*60,last=awake-120;
+  const rel=t=>((t-wake)%1440+1440)%1440;
+  const slots=[];
+  if(train){const g=rel(toMin(p.gymTime)||1200),end=g+(p.session||60);
+    if(g<150){if(g>=60)slots.push({r:Math.max(15,g-75),k:"pre"});slots.push({r:end+30,k:"post"});}
+    else{slots.push({r:30,k:"breakfast"});slots.push({r:g-75,k:"pre"});slots.push({r:end+30,k:"post"});}
+  }else slots.push({r:30,k:"breakfast"});
+  let left=n.meals-slots.length,dinnerPlaced=false;
+  while(left-->0){
+    const pts=slots.map(x=>x.r).sort((a,b)=>a-b);let best=-1,bi=0;
+    for(let i=0;i<pts.length;i++){const nx=i+1<pts.length?pts[i+1]:last+90;const gap=nx-pts[i];if(gap>best){best=gap;bi=i;}}
+    const a=pts[bi],b=bi+1<pts.length?pts[bi+1]:null;
+    if(b===null&&!dinnerPlaced&&last-a>=150){slots.push({r:last,k:"dinner"});dinnerPlaced=true;}
+    else slots.push({r:Math.round((a+(b===null?last:b))/2),k:"mid"});
+  }
+  slots.sort((a,b)=>a.r-b.r);
+  const mids=slots.filter(x=>x.k==="mid");
+  if(mids.length){let li=mids[0],bd=1e9;mids.forEach(m=>{const d=Math.abs(((wake+m.r)%1440)-900);if(d<bd){bd=d;li=m;}});
+    if(!slots.some(x=>x.k==="lunch"))li.k="lunch";
+    mids.forEach(m=>{if(m.k==="mid")m.k=(!dinnerPlaced&&!train&&m===mids[mids.length-1]&&m!==li)?"dinner":"snack";});}
+  return slots.map(x=>({t:(wake+x.r)%1440,k:x.k}));
+}
+function pickPool(type,p){
+  const no=p.noFood||[],hf=p.health||[];
+  let pool=MT[type].filter(m=>!m.t.some(t=>no.includes(t))&&!(m.ex||[]).some(f=>hf.includes(f)));
+  if(!pool.length)pool=MT[type].filter(m=>!(m.ex||[]).some(f=>hf.includes(f)));
+  return pool.length?pool:MT[type];
+}
+function buildMeal(m,T){
+  const mac=(k,g)=>[FD[k][1]*g/100,FD[k][2]*g/100,FD[k][3]*g/100];
+  const fx=(m.fx||[]).map(x=>[x[0],x[1]]);const base=[0,0,0];fx.forEach(x=>{const a=mac(x[0],x[1]);base[0]+=a[0];base[1]+=a[1];base[2]+=a[2];});
+  const P=FD[m.P],C=FD[m.C];let pg=Math.max(0,(T[0]-base[0])/(P[1]/100)),cg=0;
+  for(let it=0;it<3;it++){cg=C[2]>0?Math.max(0,(T[1]-base[1]-pg*P[2]/100)/(C[2]/100)):0;pg=Math.max(0,(T[0]-base[0]-cg*C[1]/100)/(P[1]/100));}
+  pg=Math.min(pg,P[6]);cg=Math.min(cg,C[6]);
+  let fg=0;if(m.F){const F=FD[m.F];fg=Math.max(0,(T[2]-base[2]-pg*P[3]/100-cg*C[3]/100)/(F[3]/100));fg=Math.min(fg,F[6]);}
+  const items=[];const add=(k,g)=>{if(g<=0)return;const f=FD[k];
+    let q,lbl,ug=f[5];
+    if(f[4]==="g"||f[4]==="ml"){g=g<60?Math.round(g/5)*5:Math.round(g/10)*10;lbl=g+(f[4]==="ml"?" مل ":" جم ")+f[0];}
+    else{const step=(f[4]==="egg"||f[4]==="white")?1:0.5;q=Math.max(step,Math.round(g/ug/step)*step);g=q*ug;
+      const u={egg:"بيضة",white:"بياض",loaf:"رغيف",slice:"شريحة",scoop:"سكوب",piece:"حباية",tsp:"معلقة صغيرة",tbsp:"معلقة كبيرة"}[f[4]];
+      const qs=q===0.5?"نص":q===1.5?"واحد ونص":String(q);
+      lbl=(f[4]==="egg"||f[4]==="white")?`${q} ${f[4]==="egg"?"بيض كامل":"بياض بيض"}`:`${qs} ${u} ${f[0]}`;}
+    if(g<5)return;items.push([lbl,mac(k,g)]);};
+  add(m.P,pg);fx.forEach(x=>add(x[0],x[1]));add(m.C,cg);if(m.F)add(m.F,fg);
+  const tot=items.reduce((a,x)=>[a[0]+x[1][0],a[1]+x[1][1],a[2]+x[1][2]],[0,0,0]);
+  (m.fr||[]).forEach(k=>items.push([FD[k][0]+" (براحتك)",[0,0,0]]));
+  return{items:items.map(x=>x[0]),p:Math.round(tot[0]),c:Math.round(tot[1]),f:Math.round(tot[2]),kcal:Math.round(tot[0]*4+tot[1]*4+tot[2]*9)};
+}
+function dayMeals(p,train){
+  const n=nutrition(p),sl=mealSlots(p,train);
+  const sw=[0,1,2].map(i=>sl.reduce((a,x)=>a+MW[x.k][i],0));
+  const tot=[n.prot,n.carb,n.fat];const doy=Math.floor(Date.now()/864e5);
+  return sl.map((x,i)=>{const T=[0,1,2].map(j=>tot[j]*MW[x.k][j]/sw[j]);
+    const pool=pickPool(x.k,p);const key=todayKey()+(train?"T":"R")+i;
+    const idx=(doy+i*3+((S.mealPick||{})[key]||0))%pool.length;
+    return Object.assign({t:x.t,k:x.k,key,name:pool[idx].n,many:pool.length>1},buildMeal(pool[idx],T));});
+}
+
+/* ================= VIEWS ================= */
+let foodMode=null;
+let view="today",obStep=0,draft=null,selDay=weekIdx(),editing=false;
+function render(){
+  const app=$("#app"),bar=$("#bar");
+  if(!S.profile||editing){bar.hidden=true;app.innerHTML=onboarding();bindOb();return;}
+  bar.hidden=false;
+  bar.querySelectorAll("button").forEach(b=>b.setAttribute("aria-current",b.dataset.v===view));
+  app.innerHTML=({today:vToday,week:vWeek,food:vFood,life:vLife,me:vMe}[view])();
+  bindView();
+}
+
+/* ---------- onboarding ---------- */
+const OB_STEPS=9;
+function obDraft(){if(!draft)draft=S.profile?JSON.parse(JSON.stringify(S.profile)):{name:"",sex:"m",age:"",h:"",w:"",waist:"",goal:"",level:null,place:"gym",days:4,style:"bro",session:60,gymTime:"20:00",wake:"07:00",job:"desk",health:[],cleared:false,meds:[],school:"auto",noFood:[]};return draft;}
+function ch(field,val,title,sub){const d=obDraft();return `<button class="choice" data-f="${field}" data-val="${val}" aria-pressed="${String(d[field])===String(val)}"><b>${title}</b>${sub?`<span>${sub}</span>`:""}</button>`;}
+function onboarding(){
+  const d=obDraft();let body="";
+  if(obStep===0)body=`<h1>سوبر فت</h1><p class="muted">برنامج تمرين وأكل ونوم معمول ليك انت بالظبط، ومجاني. هنسألك كام سؤال وبعدها نبني كل حاجة.</p>
+    <label class="f">اسمك</label><input type="text" id="i_name" value="${esc(d.name)}" placeholder="مثلًا: زياد">
+    <label class="f">النوع</label><div class="choices">${ch("sex","m","ذكر")}${ch("sex","f","أنثى")}</div>
+    <label class="f">السن</label><input type="number" id="i_age" inputmode="numeric" value="${esc(d.age)}" placeholder="27">`;
+  if(obStep===1)body=`<h2>جسمك دلوقتي</h2><p class="muted">بنحسب أكلك وكارديو المشاية من الأرقام دي.</p>
+    <div class="row"><div><label class="f">الطول (سم)</label><input type="number" id="i_h" inputmode="decimal" value="${esc(d.h)}" placeholder="175"></div>
+    <div><label class="f">الوزن (كجم)</label><input type="number" id="i_w" inputmode="decimal" value="${esc(d.w)}" placeholder="80"></div></div>
+    <label class="f">مقاس الوسط عند السُرّة (سم) — اختياري</label><input type="number" id="i_waist" inputmode="decimal" value="${esc(d.waist)}">
+    <div class="hint">مش هنسألك عن "نوع جسمك" (إكتومورف وكده)، لأن الأرقام الحقيقية دي بتحدد احتياجك أدق بكتير.</div>`;
+  if(obStep===2)body=`<h2>هدفك إيه؟</h2><div class="choices">${Object.entries(GOALS).map(([k,g])=>ch("goal",k,g.n,g.d)).join("")}</div>`;
+  if(obStep===3)body=`<h2>مستواك فين؟</h2><div class="choices">${LEVELS.map((l,i)=>ch("level",i,l.n,l.d)).join("")}</div>`;
+  if(obStep===5)body=`<h2>هتتمرن فين وإزاي؟</h2>
+    <div class="choices">${ch("place","gym","جيم","أجهزة وأوزان")}${ch("place","home","البيت بالدمبلز","دمبلز وكرسي أو دكة")}${ch("place","none","وزن جسمي","عقلة وأرض وكرسي، أو حديقة")}</div>
+    <label class="f">كام يوم في الأسبوع؟</label><div class="choices" style="grid-template-columns:repeat(5,1fr)">${[2,3,4,5,6].map(n=>ch("days",n,n)).join("")}</div>
+    <label class="f">مدة الحصة</label><div class="choices" style="grid-template-columns:repeat(3,1fr)">${[45,60,90].map(n=>ch("session",n,n+" د")).join("")}</div>
+    <label class="f">بتتمرن الساعة كام؟</label><input type="time" id="i_gym" value="${esc(d.gymTime)}">`;
+  if(obStep===7)body=`<h2>يومك</h2>
+    <label class="f">بتصحى الساعة كام؟</label><input type="time" id="i_wake" value="${esc(d.wake)}">
+    <label class="f">طبيعة شغلك</label><div class="choices">${ch("job","desk","مكتبي","قاعد أغلب اليوم")}${ch("job","mid","حركة متوسطة","ماشي ورايح جاي")}${ch("job","phys","شغل بدني","شيل ومجهود")}</div>
+    <label class="f">أدوية أو تنبيهات يومية (اختياري)</label>
+    <div id="meds">${(d.meds||[]).map((m,i)=>`<div class="row" style="margin:6px 0"><input type="text" data-mi="${i}" data-mk="n" value="${esc(m.n)}" placeholder="الاسم"><input type="time" data-mi="${i}" data-mk="t" value="${esc(m.t)}"></div>`).join("")}</div>
+    <button class="btn alt" id="addMed" style="margin-top:6px">+ أضف تنبيه</button>`;
+  if(obStep===4)body=`<h2>صحتك</h2><p class="muted">علّم على أي حاجة تنطبق عليك. ده بيظبط شدة التمرين ونصايح الأكل.</p>
+    ${HEALTH.filter(h=>h[0]!=="preg"||d.sex==="f").map(h=>`<label class="chk"><input type="checkbox" data-h="${h[0]}" ${d.health.includes(h[0])?"checked":""}><span>${h[1]}</span></label>`).join("")}
+    <div id="riskBox">${RISK.some(k=>d.health.includes(k))?`<div class="flag"><b>محتاج موافقة دكتور الأول.</b> لحد ما توافق، التطبيق هيخلي التمرين متوسط الشدة، من غير فشل عضلي ولا كارديو متقطع.</div>
+    <label class="chk"><input type="checkbox" id="i_clear" ${d.cleared?"checked":""}><span>الدكتور وافق إني أتمرن</span></label>`:""}</div>`;
+  if(obStep===6){const list=schools(d);if(!list.includes(d.school))d.school="auto";
+    body=`<h2>مدرسة التدريب</h2><p class="muted">دي المدارس اللي تناسب أيامك ومستواك وصحتك. تقدر تغيّرها بعدين من صفحة الأسبوع.</p><div class="choices">${list.map(k=>ch("school",k,SCHOOLS[k].n,SCHOOLS[k].d)).join("")}</div>
+    ${Object.keys(SCHOOLS).length>list.length?`<p class="muted small">في مدارس تانية هتفتح لما مستواك يعلى أو تغيّر عدد الأيام.</p>`:""}`;}
+  if(obStep===8)body=`<h2>أكلك</h2><p class="muted">علّم على اللي مش بتاكله، والوجبات المقترحة هتتعمل من غيره.</p>
+    ${NOFOOD.map(x=>`<label class="chk"><input type="checkbox" data-nf="${x[0]}" ${(d.noFood||[]).includes(x[0])?"checked":""}><span>${x[1]}</span></label>`).join("")}`;
+  const last=obStep===OB_STEPS-1;
+  return `<div class="progress"><i style="width:${(obStep+1)/OB_STEPS*100}%"></i></div>${body}
+   <div class="row" style="margin-top:20px">${obStep>0?`<button class="btn alt" id="obBack">رجوع</button>`:""}<button class="btn gold" id="obNext">${last?"ابني برنامجي":"التالي"}</button></div>
+   <p class="muted" id="obErr" role="alert" style="color:var(--warn)"></p>`;
+}
+function readOb(){const d=obDraft();const v=id=>{const e=document.getElementById(id);return e?e.value:null;};
+  if(v("i_name")!==null)d.name=v("i_name").trim();
+  if(v("i_age")!==null)d.age=v("i_age");if(v("i_h")!==null)d.h=v("i_h");if(v("i_w")!==null)d.w=v("i_w");if(v("i_waist")!==null)d.waist=v("i_waist");
+  if(v("i_gym")!==null)d.gymTime=v("i_gym");if(v("i_wake")!==null)d.wake=v("i_wake");
+  document.querySelectorAll("[data-mi]").forEach(e=>{d.meds[+e.dataset.mi][e.dataset.mk]=e.value;});
+  const c=document.getElementById("i_clear");if(c)d.cleared=c.checked;}
+function validOb(){const d=obDraft();
+  if(obStep===0&&!(+d.age>=12&&+d.age<=90))return"اكتب سنك صح.";
+  if(obStep===1&&!(+d.h>=130&&+d.h<=230&&+d.w>=35&&+d.w<=300))return"اكتب الطول بالسنتي والوزن بالكيلو.";
+  if(obStep===2&&!d.goal)return"اختار هدف.";
+  if(obStep===3&&d.level===null)return"اختار مستواك.";
+  return"";}
+function bindOb(){
+  document.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{readOb();const d=obDraft();let val=b.dataset.val;
+    if(["days","session","level"].includes(b.dataset.f))val=+val;d[b.dataset.f]=val;
+    if(b.dataset.f==="goal"&&val==="calis")d.place="none";render();});
+  document.querySelectorAll("[data-nf]").forEach(c=>c.onchange=()=>{readOb();const d=obDraft();d.noFood=(d.noFood||[]).filter(x=>x!==c.dataset.nf);if(c.checked)d.noFood.push(c.dataset.nf);});
+  document.querySelectorAll("[data-h]").forEach(c=>c.onchange=()=>{readOb();const d=obDraft();d.health=d.health.filter(x=>x!==c.dataset.h);if(c.checked)d.health.push(c.dataset.h);render();});
+  const am=$("#addMed");if(am)am.onclick=()=>{readOb();obDraft().meds.push({n:"",t:"21:00"});render();};
+  const bk=$("#obBack");if(bk)bk.onclick=()=>{readOb();obStep--;render();};
+  $("#obNext").onclick=()=>{readOb();const e=validOb();if(e){$("#obErr").textContent=e;return;}
+    if(obStep<OB_STEPS-1){obStep++;render();window.scrollTo(0,0);return;}
+    const d=obDraft();d.age=+d.age;d.h=+d.h;d.w=+d.w;d.waist=d.waist?+d.waist:null;d.meds=(d.meds||[]).filter(m=>m.n.trim());
+    if(d.age<18&&d.level>2)d.level=2;
+    const first=!S.profile;S.profile=d;if(first||!S.start)S.start=new Date().toISOString();
+    if(!S.log.weights.length)S.log.weights.push({d:todayKey(),w:d.w});
+    draft=null;obStep=0;editing=false;view="today";save();render();window.scrollTo(0,0);};
+}
+
+/* ---------- today / day ---------- */
+function dayHTML(di){
+  const p=P(),key=planFor(di),ph=cyclePhase();
+  const isToday=di===weekIdx();
+  let h=`<div class="hero"><div class="day">${WEEK[di]}${isToday?" · النهارده":""} · أسبوع ${weekNo()}</div>`;
+  if(!key){const c=cardio(p,false);
+    h+=`<div class="what">${di===6?"راحة كاملة":"راحة نشطة"}</div></div>
+    <div class="card"><b>النهارده:</b> ${di===6?"ريّح جسمك. تمشية خفيفة لو حابب.":c.txt}</div>
+    <div class="hint">الراحة جزء من التمرين. العضل بيكبر وانت مرتاح، مش وانت بتتمرن.</div>`;return h;}
+  const cal=key[0]==="C"&&CAL[key];
+  h+=`<div class="what">${cal?CAL[key].n:GYM[key].n}</div><div class="muted">${ph.n} — ${ph.d}</div></div>`;
+  if(capped(p))h+=`<div class="flag">التمرين متوسط الشدة لحد ما الدكتور يوافق. لو جالك ألم في الصدر أو دوخة أو نهجان غريب، وقّف فورًا.</div>`;
+  h+=`<div class="block"><h3>إحماء — 8 لـ 10 دقايق</h3><p>عجلة أو مشي، وبعدها لف الدراعات وتحريك الرجل و15 سكوات بوزن الجسم.</p></div>
+      <div class="block main"><h3>التمرين الأساسي</h3><p>دوس ✓ بعد كل مجموعة، ومؤقت الراحة هيشتغل لوحده.</p></div>`;
+  const dk=todayKey(),logged=(S.log.w[dk]||{});
+  const list=cal?CAL[key].x:GYM[key].x;const used=new Set();
+  const mode=!cal&&GYM[key].m;
+  if(mode){const note={power:"يوم قوة: أوزان تقيلة وعدات قليلة وراحة طويلة.","5x5":"ركّز على التكنيك، وسجّل الوزن كل مرة علشان تزوّد.",gvt:"أول تمرينين 10×10 بنفس الوزن. التمرين ده مرهق، فنام كويس وكُل كويس.",hit:"كل مجموعة لحد الفشل، فمفيش مجموعات كتير. الأهم الشدة مش العدد.",circuit:"اعمل التمارين ورا بعض كدورة واحدة، وكرّر الدورة 3 مرات."}[mode];h+=`<div class="hint">${note}</div>`;}
+  list.forEach((raw,ix)=>{
+    if(cal){const c=calDose(raw,p),id=raw+"_"+ix;const lg=logged[id]||[];
+      h+=`<div class="ex">${figSVG(cpFig(raw,c.idx))}<div class="t"><div><div class="ar">${esc(c.it[0])}</div><div class="en">${esc(CP[raw].n)} · مستوى ${c.idx+1} من ${CP[raw].l.length}</div></div><div class="dose">${c.sets}×${c.reps}</div></div>
+      <div class="meta">راحة 90 ثانية · لما تعمل كل المجموعات بالعدد الأعلى بتكنيك نضيف، اطلع للمستوى اللي بعده.</div>
+      ${linkBtns(c.it[1])}${setsHTML(id,c.sets,lg,90,true,isToday)}
+      <div class="lvlbtns"><button class="btn alt" data-pg="${raw}" data-dir="-1" ${c.first?"disabled":""}>صعبة؛ ارجع مستوى</button><button class="btn alt" data-pg="${raw}" data-dir="1" ${c.last?"disabled":""}>سهلة؛ المستوى اللي بعده</button></div></div>`;
+    }else{const k=resolve(raw,p,used),e=EX[k],dz=dose(k,p,mode,ix);const lg=logged[k]||[];
+      const prev=lastLog(k,dk);
+      h+=`<div class="ex">${figSVG(EXFIG[k])}<div class="t"><div><div class="ar">${esc(e[0])}</div><div class="en">${esc(e[1])}</div></div><div class="dose">${dz.sets}×${dz.reps}</div></div>
+      <div class="meta">راحة ${dz.rest} · ${dz.rir}</div>${prev?`<div class="last">آخر مرة: ${prev}</div>`:""}
+      ${linkBtns(e[1])}${setsHTML(k,dz.sets,lg,dz.restS,e[2]==="h",isToday)}</div>`;}
+  });
+  const c=cardio(p,true);
+  h+=`<div class="block"><h3>كارديو — ${c.min} دقيقة</h3><p>${c.txt}</p></div>
+      <div class="block"><h3>إطالة — 5 دقايق</h3><p>للعضلات اللي اشتغلت، وبعدها مع السلامة.</p></div>`;
+  return h;
+}
+function setsHTML(id,n,lg,restS,hold,editable){
+  if(!editable)return"";
+  let s=`<div class="sets">`;
+  for(let i=0;i<n;i++){const v=lg[i]||{};
+    s+=`<div class="set"><span class="i">${i+1}</span>
+    ${hold?`<input type="number" inputmode="numeric" placeholder="ثواني/عدات" data-id="${id}" data-i="${i}" data-k="r" value="${esc(v.r||"")}" style="grid-column:span 2">`:
+    `<input type="number" inputmode="decimal" placeholder="كجم" data-id="${id}" data-i="${i}" data-k="kg" value="${esc(v.kg||"")}"><input type="number" inputmode="numeric" placeholder="عدات" data-id="${id}" data-i="${i}" data-k="r" value="${esc(v.r||"")}">`}
+    <button data-done="${id}" data-i="${i}" data-rest="${restS}" aria-pressed="${!!v.ok}" aria-label="خلّصت المجموعة">✓</button></div>`;}
+  return s+`</div>`;
+}
+function lastLog(k,except){const ds=Object.keys(S.log.w).filter(d=>d!==except&&S.log.w[d][k]).sort();if(!ds.length)return"";
+  const sets=S.log.w[ds[ds.length-1]][k].filter(x=>x&&(x.kg||x.r));if(!sets.length)return"";
+  return sets.map(x=>(x.kg?x.kg+"×":"")+(x.r||"?")).join(" · ");}
+function vToday(){const p=P();
+  const done=Object.keys(S.log.w).filter(d=>Object.values(S.log.w[d]).some(a=>a.some(x=>x&&x.ok))).length;
+  const wts=S.log.weights;const diff=wts.length>1?(wts[wts.length-1].w-wts[0].w).toFixed(1):"0";
+  return `<h1>أهلًا ${esc(p.name||"يا بطل")}</h1>
+  <div class="stats"><div class="stat"><div class="n">${done}</div><div class="l">حصص خلصتها</div></div>
+  <div class="stat"><div class="n">${diff>0?"+":""}${diff}</div><div class="l">فرق الوزن (كجم)</div></div>
+  <div class="stat"><div class="n">${LEVELS[p.level].n.split(" ")[0]}</div><div class="l">مستواك</div></div></div>
+  ${dayHTML(weekIdx())}`;}
+function vWeek(){const p=P();
+  const sl=schools(p);const curS=sl.includes(p.school)?p.school:"auto";
+  return `<h1>أسبوعك</h1><p class="muted">${p.days} أيام · ${GOALS[p.goal].n} · ${LEVELS[p.level].n}</p>
+  <label class="f" for="schoolSel">مدرسة التدريب</label><select id="schoolSel">${sl.map(k=>`<option value="${k}" ${k===curS?"selected":""}>${SCHOOLS[k].n}</option>`).join("")}</select>
+  <p class="muted small">${esc(SCHOOLS[curS].d)}</p>
+  <div class="weekgrid">${WEEK.map((n,i)=>{const k=planFor(i);const t=k?(k[0]==="C"&&CAL[k]?CAL[k].n:GYM[k].n):"راحة";
+    return `<button class="d" data-sd="${i}" aria-current="${i===selDay}"><span class="k">${n}${i===weekIdx()?" (النهارده)":""}</span><span>${t}</span></button>`;}).join("")}</div>
+  ${dayHTML(selDay)}`;}
+
+/* ---------- food ---------- */
+function vFood(){const p=P(),n=nutrition(p);
+  const per=v=>Math.round(v/n.meals);
+  const tips=[];
+  if(p.health.includes("lipids")||p.health.includes("liver"))tips.push("قلّل جدًا السكر والعصاير والمشروبات الغازية والمقليات: دي أكتر حاجة بتعلّي الدهون الثلاثية ودهون الكبد.");
+  if(p.health.includes("uric"))tips.push("ابعد عن الكبدة والكلاوي والمخ والسردين والرنجة والأنشوجة، وقلّل اللحمة الحمرا لمرتين في الأسبوع، واشرب مية كتير.");
+  if(p.health.includes("sugar"))tips.push("خلي الكربوهيدرات من عيش سن وشوفان ورز بني وبطاطا، ودايمًا كُلها مع بروتين وخضار.");
+  if(p.health.includes("bp"))tips.push("قلّل الملح والمخللات والجبن الرومي والأكل المصنّع.");
+  if(p.goal==="fat")tips.push("الجوع العادي في أول أسبوعين طبيعي. المية والخضار والبروتين بيقللوه.");
+  return `<h1>أكلك</h1><p class="muted">${n.why}</p>
+  <div class="macro"><div class="stat"><div class="n">${n.kcal}</div><div class="l">سعر</div></div>
+  <div class="stat"><div class="n">${n.prot}ج</div><div class="l">بروتين</div></div>
+  <div class="stat"><div class="n">${n.carb}ج</div><div class="l">كارب</div></div>
+  <div class="stat"><div class="n">${n.fat}ج</div><div class="l">دهون</div></div></div>
+  ${n.lossWk?`<p class="muted">النزول المتوقع: حوالي ${n.lossWk} كجم في الأسبوع. لو نزلت أسرع من كده كتير، زوّد الأكل شوية.</p>`:""}
+  ${(()=>{const tr=foodMode?foodMode==="T":!!planFor(weekIdx());const ms=dayMeals(p,tr);
+    return `<h2>وجباتك ${tr?"في يوم التمرين":"في يوم الراحة"}</h2>
+    <div class="phase"><button data-fm="T" aria-pressed="${tr}">يوم تمرين</button><button data-fm="R" aria-pressed="${!tr}">يوم راحة</button></div>
+    ${ms.map(m=>`<div class="card"><div class="muted small">${tm(m.t)} · ${MTYPE[m.k]}</div><h3 style="margin:2px 0 6px">${esc(m.name)}</h3>
+    <ul class="plain" style="margin:0">${m.items.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>
+    <div class="muted small" style="margin-top:6px">≈ ${m.kcal} سعر · بروتين ${m.p} · كارب ${m.c} · دهون ${m.f}</div>
+    ${m.many?`<button class="btn alt" data-mp="${m.key}" style="margin-top:8px;padding:8px 14px;font-size:13px">🔄 اقتراح تاني</button>`:""}</div>`).join("")}
+    <p class="muted small">الكميات محسوبة على أهدافك. الأوزان للأكل بعد الطبخ.</p>`;})()}
+  <h2>عايز تركّب بنفسك؟</h2>
+  <p>كل وجبة حوالي <b>${per(n.prot)} جم بروتين</b>، و<b>${per(n.carb)} جم كارب</b>، و<b>${per(n.fat)} جم دهون</b>. اختار من الجداول دي:</p>
+  <h3>🥩 بروتين — كل سطر ≈ 30 جم</h3><div class="tbl"><table>
+  <tr><td>صدور فراخ مشوية</td><td>130 جم</td></tr><tr><td>سمك فيليه أو بلطي</td><td>150 جم</td></tr>
+  <tr><td>تونة مصفاة بالمية</td><td>علبة ونص</td></tr><tr><td>جبنة قريش</td><td>250 جم</td></tr>
+  <tr><td>بيض</td><td>2 كامل + 3 بياض</td></tr><tr><td>زبادي يوناني</td><td>300 جم</td></tr>
+  <tr><td>لحمة حمرا قليلة الدهن</td><td>130 جم</td></tr><tr><td>واي بروتين</td><td>سكوب وربع</td></tr></table></div>
+  <h3>🍚 كارب — كل سطر ≈ 40 جم</h3><div class="tbl"><table>
+  <tr><td>رز أو مكرونة مطبوخ</td><td>150 جم (كوباية)</td></tr><tr><td>عيش بلدي أو سن</td><td>رغيف إلا ربع</td></tr>
+  <tr><td>شوفان</td><td>60 جم (6 معالق)</td></tr><tr><td>بطاطس أو بطاطا مسلوقة</td><td>200 جم</td></tr>
+  <tr><td>فول مدمس</td><td>طبق كبير (250 جم)</td></tr><tr><td>فاكهة</td><td>موزة كبيرة، أو 2 تفاحة</td></tr></table></div>
+  <h3>🫒 دهون — كل سطر ≈ 10 جم</h3><div class="tbl"><table>
+  <tr><td>زيت زيتون</td><td>معلقة كبيرة</td></tr><tr><td>مكسرات</td><td>حفنة صغيرة (15 جم)</td></tr>
+  <tr><td>زبدة فول سوداني</td><td>معلقة كبيرة</td></tr><tr><td>أفوكادو</td><td>ربع حباية كبيرة</td></tr></table></div>
+  <p class="muted">والخضار والسلطة مفتوحين، كُل منهم براحتك.</p>
+  ${tips.length?`<h2>مخصوص ليك</h2>${tips.map(t=>`<div class="card">${t}</div>`).join("")}`:""}
+  <p class="muted small">حساباتك: الحرق الأساسي ${n.bmr} سعر، والاحتياج اليومي حوالي ${n.tdee} سعر.</p>`;}
+
+/* ---------- sleep & water ---------- */
+function vLife(){const p=P(),train=!!planFor(weekIdx()),sp=sleepPlan(p),L=waterL(p,train),cups=Math.ceil(L*4);
+  const dk=todayKey(),got=S.log.water[dk]||0;
+  const gymEnd=(toMin(p.gymTime)||1200)+(p.session||60);const gap=((sp.bed-gymEnd)%1440+1440)%1440;
+  const tl=timeline(p,train);
+  return `<h1>نومك ومية</h1>
+  <div class="stats"><div class="stat"><div class="n">${sp.need}</div><div class="l">ساعات نوم</div></div>
+  <div class="stat"><div class="n">${tm(sp.bed).replace(" ","")}</div><div class="l">تنام</div></div>
+  <div class="stat"><div class="n">${L}</div><div class="l">لتر مية</div></div></div>
+  ${gap<120?`<div class="flag">تمرينك بيخلص قبل النوم بأقل من ساعتين، وده ممكن يصعّب النوم. لو تقدر، قدّم التمرين شوية.</div>`:""}
+  <h2>مية النهارده</h2><p class="muted">${got} من ${cups} كوباية (250 مل)</p>
+  <div class="cups">${Array.from({length:cups},(_,i)=>`<button data-cup="${i+1}" aria-pressed="${i<got}" aria-label="كوباية ${i+1}">💧</button>`).join("")}</div>
+  <h2>يومك ${train?"(يوم تمرين)":"(يوم راحة)"}</h2>
+  <ul class="tl">${tl.map(x=>`<li class="${x[2]}"><span class="tm">${tm(x[3])}</span><span>${esc(x[1])}</span></li>`).join("")}</ul>
+  <h2>نوم أحسن</h2>
+  <div class="card">نام وصحى في نفس المعاد حتى في الإجازة. ده لوحده بيحسّن النوم والجوع والمزاج.</div>
+  <div class="card">أوضة ضلمة وباردة شوية، والموبايل بعيد عن السرير.</div>
+  <div class="card">لو بتشخّر جامد أو بتصحى مخنوق أو تعبان رغم إنك نمت كفاية، قول لدكتور. ده ممكن يبقى انقطاع نفس أثناء النوم، وبيأثر على القلب والوزن.</div>`;}
+
+/* ---------- progress / me ---------- */
+function chart(){const w=S.log.weights;if(w.length<2)return`<p class="muted">سجّل وزنك مرة في الأسبوع، الصبح بعد الحمام وقبل الأكل، والرسم هيظهر هنا.</p>`;
+  const W=320,H=140,pad=24;const vals=w.map(x=>x.w);const mn=Math.min(...vals)-1,mx=Math.max(...vals)+1;
+  const X=i=>pad+(W-2*pad)*i/(w.length-1),Y=v=>H-pad-(H-2*pad)*(v-mn)/(mx-mn||1);
+  const pts=w.map((x,i)=>X(i)+","+Y(x.w)).join(" ");
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="رسم الوزن"><polyline fill="none" stroke="var(--plate)" stroke-width="3" points="${pts}"/>
+  ${w.map((x,i)=>`<circle cx="${X(i)}" cy="${Y(x.w)}" r="3.5" fill="var(--plate)"/>`).join("")}
+  <text x="${W-pad}" y="14" font-size="11" fill="var(--muted)" text-anchor="end">${vals[0]} كجم</text>
+  <text x="${pad}" y="14" font-size="11" fill="var(--muted)">${vals[vals.length-1]} كجم</text></svg>`;}
+function vMe(){const p=P();
+  return `<h1>تقدّمي</h1>
+  <div class="card"><h3 style="margin-top:0">الوزن</h3>${chart()}
+  <div class="row" style="margin-top:10px"><input type="number" id="nw" inputmode="decimal" placeholder="وزنك النهارده (كجم)"><button class="btn gold" id="addW" style="flex:0 0 auto">سجّل</button></div></div>
+  <h2>سلّم المستويات</h2>
+  <ul class="ladder">${LEVELS.map((l,i)=>`<li class="${i===p.level?"here":i<p.level?"done":""}"><span class="lv">${i}</span><div><b>${l.n}</b><div class="muted">${l.d}</div>${i===p.level&&i<4?`<div class="small">علشان تطلع: ${l.up}</div>`:""}</div></li>`).join("")}</ul>
+  ${p.level<4?`<button class="btn alt full" id="lvUp" style="margin-top:10px">وصلت للمستوى اللي بعده ⬆</button>`:""}
+  <div class="hint"><b>عن مستر أوليمبيا:</b> البطولة دي محتاجة جينات نادرة، وسنين طويلة مع كوتش ومتابعة طبية، وأغلب المتسابقين فيها بيستخدموا هرمونات ليها مخاطر حقيقية على القلب والكبد. التطبيق بيوصّلك لأعلى مستوى طبيعي، وده يكفي إنك تنافس في بطولات كمال أجسام طبيعية.</div>
+  <h2>إعدادات</h2>
+  <button class="btn alt full" id="edit">عدّل بياناتي وهدفي</button>
+  <button class="btn alt full" id="restart" style="margin-top:8px">ابدأ دورة جديدة من أسبوع 1</button>
+  <button class="btn alt full" id="wipe" style="margin-top:8px;color:var(--warn)">امسح كل بياناتي</button>
+  <p class="muted small" style="margin-top:14px">سوبر فت مش بديل عن الدكتور. لو عندك أي مشكلة صحية، خد رأيه قبل ما تبدأ أو تغيّر في شدة التمرين.</p>
+  <p class="muted small">تنزّله على موبايلك: افتح الصفحة في المتصفح، ومن القايمة اختار "إضافة إلى الشاشة الرئيسية".</p>`;}
+
+/* ---------- bindings ---------- */
+function bindView(){
+  const ss=$("#schoolSel");if(ss)ss.onchange=()=>{S.profile.school=ss.value;save();render();};
+  document.querySelectorAll("[data-mp]").forEach(b=>b.onclick=()=>{const k=b.dataset.mp;S.mealPick=S.mealPick||{};S.mealPick[k]=(S.mealPick[k]||0)+1;save();render();});
+  document.querySelectorAll("[data-fm]").forEach(b=>b.onclick=()=>{foodMode=b.dataset.fm;render();});
+  document.querySelectorAll("[data-sd]").forEach(b=>b.onclick=()=>{selDay=+b.dataset.sd;render();});
+  document.querySelectorAll(".set input").forEach(inp=>inp.onchange=()=>{const dk=todayKey();S.log.w[dk]=S.log.w[dk]||{};
+    const a=S.log.w[dk][inp.dataset.id]=S.log.w[dk][inp.dataset.id]||[];const i=+inp.dataset.i;a[i]=a[i]||{};a[i][inp.dataset.k]=inp.value;save();});
+  document.querySelectorAll("[data-done]").forEach(b=>b.onclick=()=>{const dk=todayKey();S.log.w[dk]=S.log.w[dk]||{};
+    const a=S.log.w[dk][b.dataset.done]=S.log.w[dk][b.dataset.done]||[];const i=+b.dataset.i;a[i]=a[i]||{};a[i].ok=!a[i].ok;
+    b.setAttribute("aria-pressed",a[i].ok);save();if(a[i].ok)startTimer(+b.dataset.rest);});
+  document.querySelectorAll("[data-pg]").forEach(b=>b.onclick=()=>{const mv=b.dataset.pg,c=calDose(mv,P());
+    S.prog[mv]=Math.max(0,Math.min(CP[mv].l.length-1,c.idx+(+b.dataset.dir)));save();render();});
+  document.querySelectorAll("[data-cup]").forEach(b=>b.onclick=()=>{const dk=todayKey(),n=+b.dataset.cup;
+    S.log.water[dk]=(S.log.water[dk]===n)?n-1:n;save();render();});
+  const aw=$("#addW");if(aw)aw.onclick=()=>{const v=+$("#nw").value;if(!(v>30&&v<350))return;
+    const dk=todayKey();S.log.weights=S.log.weights.filter(x=>x.d!==dk);S.log.weights.push({d:dk,w:v});S.log.weights.sort((a,b)=>a.d<b.d?-1:1);
+    S.profile.w=v;save();render();};
+  const lu=$("#lvUp");if(lu)lu.onclick=()=>{if(confirm("متأكد إنك حققت شرط المستوى اللي بعده؟")){S.profile.level++;S.start=new Date().toISOString();save();render();}};
+  const ed=$("#edit");if(ed)ed.onclick=()=>{draft=JSON.parse(JSON.stringify(S.profile));obStep=0;editing=true;render();window.scrollTo(0,0);};
+  const rs=$("#restart");if(rs)rs.onclick=()=>{if(confirm("هترجع لأسبوع 1 في الدورة. بياناتك هتفضل زي ما هي.")){S.start=new Date().toISOString();save();render();}};
+  const wp=$("#wipe");if(wp)wp.onclick=()=>{if(confirm("هيتمسح كل حاجة: بياناتك وتمارينك ووزنك. متأكد؟")){S={profile:null,log:{w:{},weights:[],water:{},checks:{}},prog:{},start:null,updated:0};save();draft=null;obStep=0;render();}};
+}
+$("#bar").querySelectorAll("button").forEach(b=>b.onclick=()=>{view=b.dataset.v;if(view==="week")selDay=weekIdx();render();window.scrollTo(0,0);});
+
+/* ---------- rest timer ---------- */
+let tLeft=0,tInt=null,actx=null;
+function beep(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),g=actx.createGain();
+  o.frequency.value=880;o.connect(g);g.connect(actx.destination);g.gain.setValueAtTime(.2,actx.currentTime);o.start();o.stop(actx.currentTime+.35);}catch(e){}
+  try{navigator.vibrate&&navigator.vibrate([200,100,200]);}catch(e){}}
+function showT(){$("#tn").textContent=Math.floor(tLeft/60)+":"+String(tLeft%60).padStart(2,"0");}
+function startTimer(s){tLeft=s;$("#timer").classList.add("on");showT();clearInterval(tInt);
+  tInt=setInterval(()=>{tLeft--;showT();if(tLeft<=0){clearInterval(tInt);beep();$("#tn").textContent="يلا!";setTimeout(()=>$("#timer").classList.remove("on"),2500);}},1000);}
+$("#tplus").onclick=()=>{tLeft+=15;showT();};
+$("#tskip").onclick=()=>{clearInterval(tInt);$("#timer").classList.remove("on");};
+
+render();
+if("serviceWorker" in navigator&&location.protocol.startsWith("http")){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
+</script>
+</body>
+</html>
